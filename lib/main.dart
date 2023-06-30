@@ -1,7 +1,3 @@
-// Copyright 2017, Paul DeMarco.
-// All rights reserved. Use of this source code is governed by a
-// BSD-style license that can be found in the LICENSE file.
-
 import 'dart:async';
 import 'dart:io';
 
@@ -93,7 +89,6 @@ class _MainScreenState extends State<MainScreen> {
 
   int _batteryLevel = 0;
   int _controlTemp = 0;
-  int _motorTemp = 0;
   bool _connectionButtonPressed = false;
 
   final List<IconData> _batteryIcons = [
@@ -104,8 +99,8 @@ class _MainScreenState extends State<MainScreen> {
     Icons.battery_4_bar, // 50 - 62.5
     Icons.battery_5_bar, // 62.5 - 75
     Icons.battery_6_bar, // 75 - 87.5
-    Icons.battery_std,   // 87.5 - 100
-    Icons.battery_std,   // 100 - needed for the 8th index
+    Icons.battery_std, // 87.5 - 100
+    Icons.battery_std, // 100 - needed for the 8th index
   ];
 
   Widget _createInfoTexts() => Column(
@@ -118,44 +113,37 @@ class _MainScreenState extends State<MainScreen> {
             child: _batteryIcon(),
           ),
           _createInfoText("$_batteryLevel%", 80),
-          const SizedBox(height: 64,),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-            Column(children: [
-              Icon(
-                Icons.build_circle,
-                color: _brightColor,
-                size: 48,
-              ),
-              _createInfoText("$_controlTemp°C", 42),
-            ],),
-            Column(children: [Icon(
-              Icons.album_rounded,
-              color: _brightColor,
-              size: 48,
-            ),
-              _createInfoText("$_motorTemp°C", 42)],),
-          ],)
+          const SizedBox(
+            height: 64,
+          ),
+          Icon(
+            Icons.thermostat,
+            color: _brightColor,
+            size: 48,
+          ),
+          _createInfoText(
+            "$_controlTemp°C",
+            42,
+          ),
         ],
       );
 
   Icon _batteryIcon() {
     return Icon(
-    _batteryIcons[_batteryLevel ~/ 12.5],
-    color: _brightColor,
-    size: 200,
-  );
+      _batteryIcons[_batteryLevel ~/ 12.5],
+      color: _brightColor,
+      size: 200,
+    );
   }
 
   Widget _createInfoText(text, double fontSize) => Text(
-    text,
-    style: TextStyle(
-      fontSize: fontSize,
-      color: _brightColor,
-      fontWeight: FontWeight.bold,
-    ),
-  );
+        text,
+        style: TextStyle(
+          fontSize: fontSize,
+          color: _brightColor,
+          fontWeight: FontWeight.bold,
+        ),
+      );
 
   Widget _buildBatteryDisplay(List<BluetoothService> services) {
     try {
@@ -184,7 +172,6 @@ class _MainScreenState extends State<MainScreen> {
             if (value != null && value.isNotEmpty && value[6] == 0) {
               _batteryLevel = value[5];
               _controlTemp = value[14];
-              _motorTemp = value[15];
               return _createInfoTexts();
             }
           }
@@ -275,7 +262,8 @@ class _MainScreenState extends State<MainScreen> {
                       }
 
                       if (snapshot.data == BluetoothDeviceState.disconnected) {
-                        element = _createButton(context, 'CONNECT', _connectToDevice);
+                        element =
+                            _createButton(context, 'CONNECT', _connectToDevice);
                       } else if (snapshot.data ==
                           BluetoothDeviceState.connected) {
                         _device.discoverServices();
