@@ -108,9 +108,12 @@ class _MainScreenState extends State<MainScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          RotatedBox(
-            quarterTurns: 1,
-            child: _batteryIcon(),
+          Container(
+            width: 1000,
+            child: RotatedBox(
+              quarterTurns: 1,
+              child: _batteryIcon(),
+            ),
           ),
           _createInfoText("$_batteryLevel%", 80),
           const SizedBox(
